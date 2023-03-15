@@ -151,10 +151,16 @@ textarea {
   transition: margin-left .5s;
 }
 
+th{
+  overflow-y: scroll;
+}
+
 table, th, td {
   margin-left: 265px;
   border: 1px solid black;
   border-collapse: collapse;
+  padding:0;
+  margin-right:0;
 }
 th, td {
   color: white;
