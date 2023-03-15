@@ -56,6 +56,17 @@ public class SpamDetector {
         return hamProb;
     }
 
+    //Not finished yet, for calculating total probability
+    public Map<String, Integer> calPRSW(Map<String, Integer> hamProb, Map<String, Integer> spamProb) {
+        Map<String, Integer> fileSpamProb = new TreeMap<>();
+
+        for (Map.Entry<String, Integer> entry : hamProb.entrySet()) {
+            fileSpamProb.put(entry.getKey(), entry.getValue());
+        }
+
+        return fileSpamProb;
+    }
+
     //Train spam reading method
     public Map<String, Integer> trainSpamMap(File mainDirectiory) {
 
@@ -63,7 +74,7 @@ public class SpamDetector {
         Map<String, Integer> trainSpamFreq = new TreeMap<>();
 
         //Storing all file names to be read
-        File filesList[] = mainDirectiory.listFiles();
+        File filesList[] = mainDirectiory.listFiles(); //coming back as null and i dont know why
         System.out.println(filesList);
         
         //Looping through files
@@ -88,7 +99,7 @@ public class SpamDetector {
         Map<String, Integer> trainHamFreq = new TreeMap<>();
         
         //Storing all file names to be read
-        File filesList[] = mainDirectiory.listFiles();
+        File filesList[] = mainDirectiory.listFiles(); //coming back as null and i dont know why
 
         //Creates tree map from file to be added to main tree map, if file is valid
         for (File file : filesList) {
