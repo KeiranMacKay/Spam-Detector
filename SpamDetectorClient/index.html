@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -22,17 +22,73 @@
   <meta name="theme-color" content="#fafafa">
 </head>
 
-<body>
+<body style="background-color:silver;">
 
   <!-- Add your site or application content here -->
-
-
-
-
-
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+
+
+
+  <div id="side panel" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="#">Dashboard</a>
+    <a href="#">About</a>
+  </div>
+
+  <div id="button" style="background-color: #111">
+    <button class="openbtn" onclick="openNav()">☰ Dashboard</button>
+  </div>
+
+  <div id="header" class="header">
+    <h1>Spam Detector Dashboard</h1>
+  </div>
+
+  <div id="main" class="main">
+    <h1>Spam Detector Dashboard</h1>
+    <p>The table below displays the results of our spam detection algorithm:</p>
+  </div>
+
+  <div id="table" style="overflow: auto;">
+    <table id="chart">
+      <thead></thead>
+      <tbody>
+      <tr>
+        <th>file</th>
+        <th>Spam Probability (%)</th>
+        <th>class</th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="performance" class="main" >
+    <br>
+    <br>
+    <h3 class="underline"> Performance of the model</h3>
+
+    <form>
+      <p>Accuracy:
+      <input type="text" id="accuracy" name="accuracy" placeholder="0">
+      </p>
+      <p>Precision:
+        <input type="text" id="precision" name="precision" placeholder="0">
+      </p>
+
+    </form>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>
