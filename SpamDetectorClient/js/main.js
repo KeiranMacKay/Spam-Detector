@@ -29,18 +29,18 @@ function add_record(tableId, data) {
     let nameCell = newRow.insertCell(0);
     let idCell = newRow.insertCell(1);
     let gpaCell = newRow.insertCell(2);
-    let nameText = document.createTextNode(data.students[c].file);
-    let idText = document.createTextNode(data.students[c].SpamProbability);
-    let gpaText = document.createTextNode(data.students[c].Class);
+    let nameText = document.createTextNode(data.spam[c].file);
+    let idText = document.createTextNode(data.spam[c].spamProbability);
+    let gpaText = document.createTextNode(data.spam[c].actualClass);
 
     nameCell.appendChild(file);
-    idCell.appendChild(SpamProbability);
-    gpaCell.appendChild(Class);
+    idCell.appendChild(spamProbability);
+    gpaCell.appendChild(actualClass);
 
   }
 }
-
-let apiCallURL = "http://localhost:8080/spamDetector-1.0/api/spam";
+//let apiCallURL = "http://localhost:8080/lab5-1.0/api/students/json";
+let apiCallURL = "http://localhost:8080/spamDetector-1.0/api/spam/json";
 
 /**
  * Function makes a HTTP request to an API
