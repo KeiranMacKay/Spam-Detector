@@ -134,6 +134,7 @@ textarea {
   margin-left: 50px;
 }
 
+/* open button */
 .openbtn {
   font-size: 20px;
   cursor: pointer;
@@ -143,16 +144,14 @@ textarea {
   border: none;
 }
 
+/* button hover */
 .openbtn:hover {
   background-color: #444;
 }
 
+/* button slide when opened*/
 #button {
   transition: margin-left .5s;
-}
-
-th{
-  overflow-y: scroll;
 }
 
 table, th, td {

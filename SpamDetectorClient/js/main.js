@@ -1,17 +1,20 @@
 // TODO: onload function should retrieve the data needed to populate the UI
+
+// Function to open side panel
 function openNav() {
   document.getElementById("side panel").style.width = "250px";
   document.getElementById("button").style.marginLeft = "250px";
   //document.getElementById("header").style.marginLeft = "250px";
 }
 
+// Function to close side panel
 function closeNav() {
   document.getElementById("side panel").style.width = "0";
   document.getElementById("button").style.marginLeft= "0";
   //document.getElementById("header").style.marginLeft= "0";
 }
 
-
+// Function to append data to table
 function add_record(tableId, data) {
 
   // this is an example on how to get the value of an `<input>` tag
@@ -23,23 +26,23 @@ function add_record(tableId, data) {
   // TO DO ...
 
   let tableRef = document.getElementById(tableId);
-  for (c in data.students)
+  for (c in data.spam)
   {
     let newRow = tableRef.insertRow(-1);
-    let nameCell = newRow.insertCell(0);
-    let idCell = newRow.insertCell(1);
-    let gpaCell = newRow.insertCell(2);
-    let nameText = document.createTextNode(data.spam[c].file);
-    let idText = document.createTextNode(data.spam[c].spamProbability);
-    let gpaText = document.createTextNode(data.spam[c].actualClass);
+    let fileCell = newRow.insertCell(0);
+    let spamProbabilityCell = newRow.insertCell(1);
+    let actualClassCell = newRow.insertCell(2);
+    let fileText = document.createTextNode(data.spam[c].filename);
+    let spamProbabilityText = document.createTextNode(data.spam[c].spamProbability);
+    let actualClassText = document.createTextNode(data.spam[c].actualClass);
 
-    nameCell.appendChild(file);
-    idCell.appendChild(spamProbability);
-    gpaCell.appendChild(actualClass);
+    fileCell.appendChild(filename);
+    spamProbabilityCell.appendChild(spamProbability);
+    actualClassCell.appendChild(actualClass);
 
   }
 }
-//let apiCallURL = "http://localhost:8080/lab5-1.0/api/students/json";
+
 let apiCallURL = "http://localhost:8080/spamDetector-1.0/api/spam/json";
 
 /**

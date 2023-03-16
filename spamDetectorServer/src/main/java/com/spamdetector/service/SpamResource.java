@@ -55,7 +55,7 @@ public class SpamResource {
         System.out.print("Training and testing the model, please wait");
 
 //      TODO: call  this.trainAndTest();
-        trainAndTest();
+        this.trainAndTest();
 
 
     }
@@ -164,9 +164,15 @@ public class SpamResource {
         }
 
 //        TODO: load the main directory "data" here from the Resources folder
+<<<<<<< HEAD
         String path = "\\resources\\data";
         File file = new File(path);
         File mainDirectory = file;
+=======
+
+        File mainDirectory = "\\resources\\data";
+
+>>>>>>> 568b1a34635aac5073324668bf4f9365581e3cfb
         return this.detector.trainAndTest(mainDirectory);
     }
 
