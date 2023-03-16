@@ -23,6 +23,7 @@ public class SpamResource {
         System.out.print("Training and testing the model, please wait");
 
 //      TODO: call  this.trainAndTest();
+        this.trainAndTest();
 
 
     }
@@ -31,6 +32,9 @@ public class SpamResource {
     public Response getSpamResults() {
 //       TODO: return the test results list of TestFile, return in a Response object
 
+        ArrayList<TestFile> testFileList = new ArrayList<>();
+
+        testFileList = trainAndTest();
         return null;
     }
 
@@ -40,6 +44,9 @@ public class SpamResource {
     public Response getAccuracy() {
 //      TODO: return the accuracy of the detector, return in a Response object
 
+        int correct = correct(this.trainAndTest());
+        int incorrect = incorrect(this.trainAndTest());
+        
         return null;
     }
 
@@ -49,7 +56,32 @@ public class SpamResource {
     public Response getPrecision() {
        //      TODO: return the precision of the detector, return in a Response object
 
+        int correct = correct(this.trainAndTest());
+        int incorrect = incorrect(this.trainAndTest());
+
         return null;
+    }
+
+    private int correct(List<TestFile> testFileList) {
+        int incor = 0;
+        for (TestFile file : testFileList) {
+            if (file.getActualClass() == "ham") {
+                cor++;
+            }
+        }
+
+        return cor;
+    }
+
+    private int incorrect(List<TestFile> testFileList) {
+        int incor = 0;
+        for (TestFile file : testFileList) {
+            if (file.getActualClass() == "spam") {
+                incor++;
+            }
+        }
+
+        return incor;
     }
 
     private List<TestFile> trainAndTest()  {
@@ -58,7 +90,8 @@ public class SpamResource {
         }
 
 //        TODO: load the main directory "data" here from the Resources folder
-        File mainDirectory = null;
+        File mainDirectory = "\\resources\\data";
         return this.detector.trainAndTest(mainDirectory);
     }
+
 }
