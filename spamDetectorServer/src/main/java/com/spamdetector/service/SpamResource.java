@@ -52,7 +52,7 @@ public class SpamResource {
         System.out.print("Training and testing the model, please wait");
 
 //      TODO: call  this.trainAndTest();
-        trainAndTest();
+        this.trainAndTest();
 
 
     }
@@ -125,7 +125,9 @@ public class SpamResource {
         }
 
 //        TODO: load the main directory "data" here from the Resources folder
+
         File mainDirectory = "\\resources\\data";
+
         return this.detector.trainAndTest(mainDirectory);
     }
 }
