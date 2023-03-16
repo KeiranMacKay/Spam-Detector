@@ -12,21 +12,30 @@ public class SpamDetector {
 
     public List<TestFile> trainAndTest(File mainDirectory) {
 
+        ArrayList<TestFile> testFileList = new ArrayList<>();
+
         //Creating TreeMaps for ham and spam frequency
+        //Ham maps
         Map<String, Integer> trainHam = new TreeMap<>();
         Map<String, Double> trainHamFreq = new TreeMap<>();
-        
         Map<String, Integer> trainHam2 = new TreeMap<>();
 
+        //Spam maps
         Map<String, Integer> trainSpam = new TreeMap<>();
         Map<String, Double> trainSpamFreq = new TreeMap<>();
 
+        //Final prob map
         Map<String, Double> probFinal = new TreeMap<>();
 
         //Creating file paths
+        //Training file locations
         File ham = new File(mainDirectory.getAbsolutePath() + "/train/ham");
         File ham2 = new File(mainDirectory.getAbsolutePath() + "/train/ham2");
         File spam = new File(mainDirectory.getAbsolutePath() + "/train/spam");
+
+        //Testing file locations 
+        File Tham = new File(mainDirectory.getAbsolutePath() + "/test/ham");
+        File Tspam = new File(mainDirectory.getAbsolutePath() + "/test/spam");
 
         //Setting training map
         trainHam = trainHamMap(ham);
@@ -43,13 +52,36 @@ public class SpamDetector {
             }
         }
 
+        //Calculating probs
         trainHamFreq = calPRWH(countFiles(ham) + countFiles(ham2), trainHam);
         trainSpamFreq = calPRWS(countFiles(spam), trainSpam);
 
+        //Probability word is spam
         probFinal = calPRSW(trainHamFreq, trainSpamFreq);
-        
 
-        return new ArrayList<TestFile>();
+        //List of files
+        File[] files = Tham.listFiles();
+        File[] sfiles = Tspam.listFiles();
+
+        //Test ham files
+        try {
+            for (File file : files) {
+                testFileList.add(new TestFile(file.getName(), calcSpamProb(probFinal, file), "ham"));
+            }
+        } catch (Exception e) {
+            System.out.println("File error");
+        }
+
+        //Test spam files
+        try {
+            for (File file : sfiles) {
+                testFileList.add(new TestFile(file.getName(), calcSpamProb(probFinal, file), "spam"));
+            }
+        } catch (Exception e) {
+            System.out.println("File error");
+        }
+
+        return testFileList;
     }
 
     //Calculate word probability on spams
@@ -114,16 +146,22 @@ public class SpamDetector {
         return fileSpamProb;
     }
 
-    public double calcSpamProb(Map<String, Double> wordProb) {
-        double sProb = 0.0;
+    public double calcSpamProb(Map<String, Double> prSW, File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+
         double n = 0.0;
 
-        for (Map.Entry<String, Double> entry : wordProb.entrySet()) {
-            n += (Math.log(1-entry.getValue()) - Math.log(entry.getValue()));
+        while(scanner.hasNext()) {
+            String word = (scanner.next()).toLowerCase();
+
+            if (prSW.containsKey(word)) {
+                double sProb = prSW.get(word);
+                n += Math.log(1 - sProb)- Math.log(sProb);
+            }
         }
 
-        sProb = 1 / (1 + Math.pow(Math.E, n));
-        return sProb;
+        scanner.close();
+        return 1/(1 + Math.exp(n));
     }
 
     //Train spam reading method
@@ -247,7 +285,3 @@ public class SpamDetector {
         return fileCount;
     }
 }
-
-
-
-
