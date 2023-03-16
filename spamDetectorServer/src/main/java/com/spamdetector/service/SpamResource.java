@@ -7,14 +7,43 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import jakarta.ws.rs.core.Response;
 
 @Path("/spam")
 public class SpamResource {
+    private String readFileContents(String filename) {
+        /**
+         * if there is no '/' at the beginning, the following function call will return `null`
+         */
+        String f;
+        if (filename.charAt(0) != '/') {
+            f = '/' + filename;
+        } else {
+            f = filename;
+        }
 
-//    your SpamDetector Class responsible for all the SpamDetecting logic
+        /**
+         * trying to open and read the file
+         */
+        try {
+            java.nio.file.Path file = java.nio.file.Path.of(
+                    SpamResource.class.getResource(f)
+                            .toString()
+                            .substring(6));
+            return Files.readString(file);
+        } catch (IOException e) {
+            // something went wrong
+            return "Did you forget to create the file?\n" +
+                    "Is the file in the right location?\n" +
+                    e.toString();
+        }
+    }
+
+    //    your SpamDetector Class responsible for all the SpamDetecting logic
     SpamDetector detector = new SpamDetector();
 
 
@@ -23,6 +52,7 @@ public class SpamResource {
         System.out.print("Training and testing the model, please wait");
 
 //      TODO: call  this.trainAndTest();
+        trainAndTest();
 
 
     }
@@ -31,7 +61,12 @@ public class SpamResource {
     public Response getSpamResults() {
 //       TODO: return the test results list of TestFile, return in a Response object
 
-        return null;
+        Response myResp = Response.status(200)
+                .header("Content-Type", "application/json")
+                .entity(this.readFileContents("/test/ham"))
+                .build();
+
+        return myResp;
     }
 
     @GET
@@ -40,16 +75,26 @@ public class SpamResource {
     public Response getAccuracy() {
 //      TODO: return the accuracy of the detector, return in a Response object
 
-        return null;
+        Response myResp = Response.status(200)
+                .header("Content-Type", "application/json")
+                .entity(this.readFileContents("/test/ham"))
+                .build();
+
+        return myResp;
     }
 
     @GET
     @Path("/precision")
     @Produces("application/json")
     public Response getPrecision() {
-       //      TODO: return the precision of the detector, return in a Response object
+        //      TODO: return the precision of the detector, return in a Response object
 
-        return null;
+        Response myResp = Response.status(200)
+                .header("Content-Type", "application/json")
+                .entity(this.readFileContents("/test/ham"))
+                .build();
+
+        return myResp;
     }
 
     private List<TestFile> trainAndTest()  {
