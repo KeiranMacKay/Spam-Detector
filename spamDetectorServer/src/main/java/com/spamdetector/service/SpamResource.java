@@ -9,6 +9,8 @@ import jakarta.ws.rs.Produces;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.AccessController;
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 
@@ -48,7 +50,7 @@ public class SpamResource {
     SpamDetector detector = new SpamDetector();
 
 
-    SpamResource(){
+    SpamResource() throws IOException{
 //        TODO: load resources, train and test to improve performance on the endpoint calls
         System.out.print("Training and testing the model, please wait");
 
@@ -76,9 +78,23 @@ public class SpamResource {
     public Response getAccuracy() {
 //      TODO: return the accuracy of the detector, return in a Response object
 
+        ArrayList<String, Integer> list1= new ArrayList<>();
+        int cor = 0;
+        int incor = 0;
+
+        cor = correctG(list1);
+        incor = incorrectG(list1);
+
+        double acc = 0.0;
+
+        list1 = trainAndTest();
+
+        acc = (cor + incor) / list1.size();
+
+
         Response myResp = Response.status(200)
                 .header("Content-Type", "application/json")
-                .entity(this.readFileContents("/test/ham"))
+                .entity(acc)
                 .build();
 
         return myResp;
@@ -90,35 +106,55 @@ public class SpamResource {
     public Response getPrecision() {
         //      TODO: return the precision of the detector, return in a Response object
 
+        ArrayList<String, Integer> list1= new ArrayList<>();
+        int cor = 0;
+        int incor = 0;
+
+        cor = correctG(list1);
+        incor = incorrectG(list1);
+
+        double per = 0.0;
+
+        list1 = trainAndTest();
+
+        per = cor / (incor+cor);
+
         Response myResp = Response.status(200)
                 .header("Content-Type", "application/json")
-                .entity(this.readFileContents("/test/ham"))
+                .entity(per)
                 .build();
 
         return myResp;
     }
 
 
-
+    //Get correct guesses
     private int correctG(List<TestFile> files) {
         int cor = 0;
 
-        for (TestFile i : files) {
-            if (i.getActualClass() == i.getClass()) {
+        for (int i = 0; i < files.size(); i++) {
+            if (Math.round(files.get(i).getSpamProbability()) == 1 && files.get(i).getActualClass() == "spam" ) {
+                cor++;
+            } else if (Math.round(files.get(i).getSpamProbability()) == 0 && files.get(i).getActualClass() == "ham" ) {
                 cor++;
             }
         }
+        
         return cor;
     }
 
+    //Get incorrect guesses
     private int incorrectG(List<TestFile> files) {
         int incor = 0;
 
-        for (TestFile i : files) {
-            if (i.getActualClass() != i.getClass()) {
+        for (int i = 0; i < files.size(); i++) {
+            if (Math.round(files.get(i).getSpamProbability()) == 0 && files.get(i).getActualClass() == "spam" ) {
+                incor++;
+            } else if (Math.round(files.get(i).getSpamProbability()) == 1 && files.get(i).getActualClass() == "ham" ) {
                 incor++;
             }
         }
+
         return incor;
     }
 
@@ -128,9 +164,13 @@ public class SpamResource {
         }
 
 //        TODO: load the main directory "data" here from the Resources folder
-        File mainDirectory = "\\resources\\data";
+        String path = "\\resources\\data";
+        File file = new File(path);
+        File mainDirectory = file;
         return this.detector.trainAndTest(mainDirectory);
     }
+
+
 
     private String wrap_json(String tag, String data) {
         return "\"" + tag + "\"" + ":" + data + ",";
@@ -142,26 +182,30 @@ public class SpamResource {
     @Produces("application/json")
     public String toJSON() {
         //starting file
-        String file = "[";
+        String files = "[";
 
         ArrayList<TestFile> testFileList = new ArrayList<>();
-        testFileList = trainAndTest();
+
+        testFileList = (ArrayList<TestFile>) trainAndTest();
+
+
 
         String inner = "";
         //wrapping ech Student object in json braces
-        for (int i = 0; i < testFileList.size(); i++) {
-            inner += "{" + wrap_json("spamProbRounded", Math.round(testFileList[i].getSpamProbability)) +
-                            wrap_json("file", testFileList[i].getFilename) +
-                            wrap_json("spamProbability", testFileList[i].getSpamProbability) +
-                            wrap_json("actualClass", testFileList[i].getActualClass) + "},";
+        for (TestFile file: testFileList ) {
+            inner += "{" + wrap_json("spamProbRounded", String.valueOf(file.getSpamProbability())) +
+                    wrap_json("file", file.getFilename()) +
+                    wrap_json("spamProbability", String.valueOf(file.getSpamProbability())) +
+                    wrap_json("actualClass", String.valueOf(file.getSpamProbability())) +
+                    "},";
         }
 
         // ending file
-        file += inner + "]";
+        files += inner + "]}";
 
-        return file;
+        return files;
 
     }
 }
-
+ 
     

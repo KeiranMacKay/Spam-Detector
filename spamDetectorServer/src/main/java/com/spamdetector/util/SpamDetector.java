@@ -10,6 +10,10 @@ import java.lang.Math;
 
 public class SpamDetector {
 
+    public SpamDetector() {
+
+    }
+
     public List<TestFile> trainAndTest(File mainDirectory) {
 
         ArrayList<TestFile> testFileList = new ArrayList<>();
